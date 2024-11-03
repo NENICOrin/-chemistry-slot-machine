@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>화학 슬롯 머신</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0f7fa; /* 연한 파란색 배경 */
+            color: #333;
+        }
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: #00796b; /* 어두운 초록색 */
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #009688; /* 청록색 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: background-color 0.3s; /* 배경색 전환 효과 */
+        }
+        button:hover {
+            background-color: #00796b; /* 버튼 호버 시 색상 변화 */
+        }
+        #result {
+            font-size: 24px;
+            margin: 20px;
+            border: 2px solid #009688; /* 청록색 테두리 */
+            padding: 10px;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+            display: inline-block;
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 20px;
+            color: #4caf50; /* 초록색 */
+        }
+        .slot {
+            font-size: 48px;
+            font-weight: bold;
+            display: inline-block;
+            min-width: 60px; /* 슬롯 최소 너비 */
+            transition: transform 0.5s ease-in-out; /* 애니메이션 효과 */
+        }
+        .success {
+            color: #4caf50; /* 초록색 성공 메시지 */
+        }
+        .failure {
+            color: #f44336; /* 빨간색 실패 메시지 */
+        }
+    </style>
+</head>
+<body>
+    <h1>화학 슬롯 머신</h1>
+    <button id="spinButton">슬롯 돌리기</button>
+    <div id="result"></div>
+    <div id="score"></div>
+    
+    <div id="slots">
+        <div class="slot" id="slot1">?</div>
+        <div class="slot" id="slot2">?</div>
+        <div class="slot" id="slot3">?</div>
+    </div>
+
+    <script>
+        const elements = ['H', 'C', 'O', 'N', 'S']; // 원소 목록
+        const spinButton = document.getElementById('spinButton');
+        const resultDisplay = document.getElementById('result');
+        const scoreDisplay = document.getElementById('score');
+        const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+
+        spinButton.addEventListener('click', async () => {
+            resultDisplay.innerText = ""; // 결과 초기화
+            scoreDisplay.innerText = ""; // 점수 초기화
+
+            // 슬롯을 하나씩 회전
+            for (let i = 0; i < 3; i++) {
+                const randomIndex = Math.floor(Math.random() * elements.length);
+                slots[i].innerText = elements[randomIndex];
+                slots[i].style.transform = "rotateY(360deg)"; // 회전 애니메이션
+                await new Promise(resolve => setTimeout(resolve, 500)); // 0.5초 대기
+                slots[i].style.transform = ""; // 회전 애니메이션 초기화
+            }
+
+            // 원소 조합
+            const first = slots[0].innerText;
+            const second = slots[1].innerText;
+            const third = slots[2].innerText;
+            const resultCombination = `${first}${second}${third}`;
+            resultDisplay.innerText = `조합: ${resultCombination}`;
+
+            // 성공 메시지 출력
+            if (resultCombination === 'HHO' || resultCombination === 'HOH' || resultCombination === 'OHH' || resultCombination === 'HOO' || resultCombination === 'OOH' || resultCombination === 'OHO') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 물(H₂O) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'CHO' || resultCombination === 'COH' || resultCombination === 'HCO' || 
+                       resultCombination === 'OCH' || resultCombination === 'OHC' || resultCombination === 'HOC') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 포도당(C₆H₁₂O₆) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'OOO') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 산소(O₂) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'HHH') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 수소(H₂) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'HHS' || resultCombination === 'HSH' || resultCombination === 'SHH' || 
+                       resultCombination === 'HSS' || resultCombination === 'SHS' || resultCombination === 'SSS') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 황화수소(H₂S) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'HNH' || resultCombination === 'NHH' || resultCombination === 'HHN' || 
+                       resultCombination === 'HNN' || resultCombination === 'NHN' || resultCombination === 'NNH') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 암모니아(NH₃) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'HCN' || resultCombination === 'HNC' || 
+                       resultCombination === 'CHN' || resultCombination === 'CNH' || 
+                       resultCombination === 'NHC' || resultCombination === 'NCH') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 시안화수소(HCN) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'CCS' || resultCombination === 'CSC' || 
+                       resultCombination === 'SCC' || resultCombination === 'CSS' || 
+                       resultCombination === 'SCS' || resultCombination === 'SSC') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 황화탄소(CS₂) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'NNO' || resultCombination === 'NON' || 
+                       resultCombination === 'ONN' || resultCombination === 'NNO' || 
+                       resultCombination === 'NON' || resultCombination === 'ONN') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 아산화질소(N₂O) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'CHH' || resultCombination === 'HCH' || 
+                       resultCombination === 'HHC' || resultCombination === 'HCC' || 
+                       resultCombination === 'CCH' || resultCombination === 'CCH') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 메탄(CH₄) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'CCO' || resultCombination === 'COC' || 
+                       resultCombination === 'OCC' || resultCombination === 'OCO' || 
+                       resultCombination === 'COO' || resultCombination === 'OOC') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 이산화탄소(CO₂) 조합이 성공했습니다!</span>";
+            } else {
+                scoreDisplay.innerHTML = "<span class='failure'>안타깝습니다! 조합이 실패했습니다.</span>";
+            }
+        });
+    </script>
+</body>
+</html>
