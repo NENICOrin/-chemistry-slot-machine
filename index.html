@@ -106,6 +106,9 @@
             } else if (resultCombination === 'CHO' || resultCombination === 'COH' || resultCombination === 'HCO' || 
                        resultCombination === 'OCH' || resultCombination === 'OHC' || resultCombination === 'HOC') {
                 scoreDisplay.innerHTML = "<span class='success'>축하합니다! 포도당(C₆H₁₂O₆) 조합이 성공했습니다!</span>";
+            } else if (resultCombination === 'SOO' || resultCombination === 'OSO' || resultCombination === 'OOS' || 
+                       resultCombination === 'SSO' || resultCombination === 'SOS' || resultCombination === 'OSS') {
+                scoreDisplay.innerHTML = "<span class='success'>축하합니다! 이산화황(SO₂) 조합이 성공했습니다!</span>";
             } else if (resultCombination === 'OOO') {
                 scoreDisplay.innerHTML = "<span class='success'>축하합니다! 산소(O₂) 조합이 성공했습니다!</span>";
             } else if (resultCombination === 'HHH') {
